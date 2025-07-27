@@ -1,4 +1,6 @@
 # 🔍 Health Monitor
+- 🚨 **Alert Management** - Receive notifications when services go down or performance degrades
+- 📈 **Performance Analytics** - Interactive charts and graphs for system performance analysis
 
 A modern, responsive application health monitoring dashboard built with React, TypeScript, and Tailwind CSS. Monitor your applications, services, and infrastructure with real-time status updates, performance metrics, and comprehensive system health insights.
 
@@ -18,7 +20,16 @@ A modern, responsive application health monitoring dashboard built with React, T
 - 🎨 **Modern UI** - Clean, intuitive dashboard interface with Tailwind CSS
 - ⚡ **Real-time Updates** - Live monitoring with WebSocket connections and fast refresh rates
 
-## 🚀 Quick Start
+## � What You Can Monitor
+
+- **Web Applications** - HTTP endpoints, response times, SSL certificates
+- **APIs & Services** - REST APIs, GraphQL endpoints, microservices
+- **Databases** - Connection status, query performance, resource usage
+- **Infrastructure** - Server resources, memory usage, CPU load
+- **Docker Containers** - Container health, resource consumption
+- **Custom Metrics** - Business KPIs, custom application metrics
+
+## �🚀 Quick Start
 
 ### Prerequisites
 
@@ -101,6 +112,22 @@ src/
 - [ ] **Docker Integration** - Monitor containerized applications and orchestration platforms
 - [ ] **Auto-scaling Triggers** - Integrate with cloud providers for automatic scaling based on metrics
 
+## 🚀 Getting Started with Monitoring
+
+### Basic Setup
+
+1. **Configure your first service**
+   Add a new service endpoint in the dashboard
+
+2. **Set up alerts**
+   Define thresholds for uptime and response time alerts
+
+3. **Create dashboards**
+   Build custom dashboards with relevant metrics for your team
+
+4. **Integrate with existing tools**
+   Connect with your current monitoring and alerting infrastructure
+
 ## 🤝 Contributing
 
 We welcome contributions! Please follow these steps:
@@ -118,6 +145,29 @@ We welcome contributions! Please follow these steps:
 - Add proper type definitions for new features
 - Ensure responsive design for all components
 - Write meaningful commit messages
+- Add unit tests for new functionality
+- Update documentation as needed
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+VITE_API_BASE_URL=http://localhost:3001
+VITE_WEBSOCKET_URL=ws://localhost:3001
+VITE_REFRESH_INTERVAL=30000
+```
+
+### Monitoring Configuration
+
+The application supports various monitoring configurations:
+
+- **Health Check Intervals** - Configure how often services are checked
+- **Alert Thresholds** - Set custom thresholds for different metrics
+- **Notification Channels** - Configure email, Slack, or webhook notifications
+- **Data Retention** - Set how long to keep historical monitoring data
 
 ## 📝 License
 
@@ -130,6 +180,7 @@ If you encounter any issues or have questions:
 1. Check the [Issues](https://github.com/wodoame/health-monitor/issues) page
 2. Create a new issue with detailed information
 3. Join our community discussions
+4. Review the documentation and examples
 
 ## 🙏 Acknowledgments
 
