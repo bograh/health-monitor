@@ -1,15 +1,15 @@
-// API response types for the health monitor application
-
-export interface LogEntry {
-  id: string;
-  timestamp: string;
-  level: 'Error' | 'Warning' | 'Info' | 'Debug';
-  path: string;
-  message: string;
+export type ErrorLog = {
+  id: string
+  timestamp: string
+  date: string
+  time_since: string
+  request_path: string
+  level: "Error" | "Warning" | "Info"
+  message: string
 }
-
+// API response types for the health monitor application
 export interface LogsResponse {
-  logs: LogEntry[];
+  logs: ErrorLog[];
   total?: number;
   page?: number;
   limit?: number;

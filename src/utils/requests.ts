@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { LogEntry, LogsResponse, ServiceStatus, PerformanceMetric, AlertRule } from '../types/api.types';
+import type { ErrorLog, LogsResponse, ServiceStatus, PerformanceMetric, AlertRule } from '../types/api.types';
 
 // Create an axios instance with default configuration
 const apiClient = axios.create({
@@ -99,7 +99,7 @@ export { apiClient };
 // Specific API functions for health monitoring
 
 // Fetch logs with proper typing
-export async function fetchLogs(url: string): Promise<LogEntry[]> {
+export async function fetchLogs(url: string): Promise<ErrorLog[]> {
   try {
     const response = await apiClient.get<LogsResponse>(url);
     return response.data.logs;

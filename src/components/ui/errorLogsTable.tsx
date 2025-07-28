@@ -7,21 +7,10 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Badge } from "./badge"
-import { useEffect, useState } from "react"
-import { fetchJSONData } from "@/utils/requests"
 import { Skeleton } from "@/components/ui/skeleton"
-
- 
-
-export type ErrorLog = {
-  id: string
-  timestamp: string
-  date: string
-  time_since: string
-  request_path: string
-  level: "Error" | "Warning" | "Info"
-  message: string
-}
+import type{ ErrorLog } from "@/types/api.types"
+import { useQuery } from "@tanstack/react-query"
+import { fetchLogs } from "@/utils/requests"
 
 function getLogLevelClass(level: ErrorLog["level"]): string {
   switch (level.toLocaleLowerCase()) {
@@ -38,23 +27,14 @@ function getLogLevelClass(level: ErrorLog["level"]): string {
 const API_BASE_URL = 'https://expense-tracking-application.onrender.com';
 
 export function ErrorLogsTable() {
-  const [data, setData] = useState<ErrorLog[]>([]);
-  const [ready, setReady] = useState(false);
-  
-  // Fetch error logs from the API
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await fetchJSONData<ErrorLog[]>(`${API_BASE_URL}/api/error-logs`);
-        setData(result);
-        setReady(true);
-      } catch (error) {
-        console.error("Error fetching error logs:", error);
-      }
-    };
+  const { data: logs, isLoading, isError} = useQuery({
+    queryKey: ['logs'],
+    queryFn: () => fetchLogs(`${API_BASE_URL}/api/error-logs`)
+  });
 
-    fetchData();
-  }, []);
+  if(isError){
+    return <div>Failed to load logs</div>
+  }
 
   return (
     <div className="w-full">
@@ -79,7 +59,7 @@ export function ErrorLogsTable() {
           </TableHeader>
           <TableBody>
             {/* create the rows */}
-            {ready?data.map((log) => (
+            {!isLoading?logs!.map((log) => (
                 <TableRow key={log.id}>
                     <TableCell>{log.date}</TableCell>
                     <TableCell>
