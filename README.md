@@ -1,3 +1,4 @@
+![Preview](preview.png)
 # 🔍 Health Monitor
 - 🚨 **Alert Management** - Receive notifications when services go down or performance degrades
 - 📈 **Performance Analytics** - Interactive charts and graphs for system performance analysis
