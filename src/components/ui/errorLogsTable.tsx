@@ -37,40 +37,51 @@ export function ErrorLogsTable() {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-full">
       <h3 className='text-lg font-semibold py-4'>Recent Error Logs</h3>
       <div className="overflow-hidden rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>
-                Date
-              </TableHead>  
-              <TableHead>
-                Level
-              </TableHead>  
-              <TableHead>
-                Message
-              </TableHead>
-              <TableHead>
-                Path
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {/* create the rows */}
-            {!isLoading?logs!.map((log) => (
-                <TableRow key={log.id}>
-                    <TableCell>{log.date}</TableCell>
-                    <TableCell>
-                        <Badge className={`rounded-full ${getLogLevelClass(log.level)}`}>{log.level}</Badge>
-                     </TableCell>
-                    <TableCell>{log.message}</TableCell>
-                    <TableCell>{log.request_path}</TableCell>
-                </TableRow>
-            )): <TableRowSkeleton />}
-          </TableBody>
-        </Table>
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="min-w-[120px]">
+                  Date
+                </TableHead>  
+                <TableHead className="min-w-[80px]">
+                  {/* align heading with the badge text */}
+                  <div className="px-2.5"> 
+                    Level
+                  </div>
+                </TableHead>  
+                <TableHead className="min-w-[200px] max-w-[300px]">
+                  Message
+                </TableHead>
+                <TableHead className="min-w-[150px]">
+                  Path
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {/* create the rows */}
+              {!isLoading?logs!.map((log) => (
+                  <TableRow key={log.id}>
+                      <TableCell className="min-w-[120px] whitespace-nowrap">{log.date}</TableCell>
+                      <TableCell className="min-w-[80px]">
+                          <Badge className={`rounded-full ${getLogLevelClass(log.level)}`}>{log.level}</Badge>
+                       </TableCell>
+                      <TableCell className="min-w-[200px] max-w-[300px]">
+                        <div className="truncate" title={log.message}>
+                          {log.message}
+                        </div>
+                      </TableCell>
+                      <TableCell className="min-w-[150px]">
+                        {log.request_path}
+                      </TableCell>
+                  </TableRow>
+              )): <TableRowSkeleton />}
+            </TableBody>
+          </Table>
+        </div>
       </div>
     </div>
   )
@@ -80,17 +91,17 @@ export function TableRowSkeleton({rows = 5}: {rows?: number}) {
     return (
         Array.from({ length: rows }).map((_, index) => (
         <TableRow key={'skeleton-row-' + index}>
-        <TableCell>
+        <TableCell className="min-w-[120px]">
             <Skeleton className="h-[20px] w-[100px] rounded-full" />
         </TableCell>
-        <TableCell>
-            <Skeleton className="h-[20px] w-[100px] rounded-full" />
+        <TableCell className="min-w-[80px]">
+            <Skeleton className="h-[20px] w-[60px] rounded-full" />
         </TableCell>
-        <TableCell>
-            <Skeleton className="h-[20px] w-[100px] rounded-full" />
+        <TableCell className="min-w-[200px] max-w-[300px]">
+            <Skeleton className="h-[20px] w-[250px] rounded-full" />
         </TableCell>
-        <TableCell>
-            <Skeleton className="h-[20px] w-[100px] rounded-full" />
+        <TableCell className="min-w-[150px]">
+            <Skeleton className="h-[20px] w-[120px] rounded-full" />
         </TableCell>
         </TableRow>
         ))

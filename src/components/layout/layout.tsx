@@ -14,7 +14,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { ErrorLogsTable } from "../ui/errorLogsTable"
-
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 export default function Layout() {
   return (
     <SidebarProvider>
@@ -44,9 +44,47 @@ export default function Layout() {
         </header>
 
         {/* main section */}
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <h1 className="text-2xl font-semibold">Xpense</h1>
+           
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+            <Card className="rounded-sm">
+              <CardHeader>
+                <CardTitle>
+                  <p>Status</p>
+                </CardTitle>
+                {/* <CardDescription>Card Description</CardDescription> */}
+                {/* <CardAction>Card Action</CardAction> */}
+            </CardHeader>
+            <CardContent>
+              <div className="inline-flex items-center gap-2">
+                  <span>
+                    Running
+                  </span>
+                  <span className="size-2 inline-block bg-teal-600 rounded-full me-2 animate-pulse"></span>
+              </div>
+            </CardContent>
+            {/* <CardFooter>
+              <p>Card Footer</p>
+            </CardFooter> */}
+          </Card>
+          <Card className="rounded-sm">
+            <CardHeader>
+              <CardTitle>Active Users</CardTitle>
+              {/* <CardDescription>Card Description</CardDescription> */}
+              {/* <CardAction>Card Action</CardAction> */}
+            </CardHeader>
+            <CardContent>
+              <p>1</p>
+            </CardContent>
+            {/* <CardFooter>
+              <p>Card Footer</p>
+            </CardFooter> */}
+          </Card>
+          </div>
+
           <ErrorLogsTable />
-        </div>
+        </main>
       </SidebarInset>
     </SidebarProvider>
   )

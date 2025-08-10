@@ -1,6 +1,15 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Custom Font Import */
+@font-face {
+  font-family: 'Poppins';
+  src: url('./assets/fonts/Poppins-Regular.ttf') format('truetype');
+  font-weight: 400; /* Regular weight */
+  font-style: normal;
+  font-display: swap; /* Improves loading performance */
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -116,5 +125,11 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
   }
+}
+
+/* Custom utility classes */
+.font-poppins {
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
 }
