@@ -26,7 +26,7 @@ interface Incident {
   id: string;
   title: string;
   severity: "critical" | "high" | "medium" | "low";
-  status: "open" | "investigating" | "resolved";
+  status: "open" | "investigating" | "resolved" | "closed";
   createdAt: string;
   updatedAt: string;
 }

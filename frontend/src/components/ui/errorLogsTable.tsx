@@ -147,8 +147,8 @@ export function ErrorLogsTable() {
     );
   }
 
-  const errors = errorData?.errors || [];
-  const totalErrors = errorData?.total || 0;
+  const errors = errorData?.data?.errors || [];
+  const totalErrors = errorData?.data?.total || 0;
 
   return (
     <div className="w-full max-w-full">

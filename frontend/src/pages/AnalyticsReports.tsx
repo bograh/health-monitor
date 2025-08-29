@@ -147,9 +147,10 @@ export function AnalyticsReportsPage() {
       estimatedTime: "~3 minutes",
       dataPoints: [
         "Response times",
-        "Throughput",
+        "Throughput metrics",
         "Resource usage",
         "Performance trends",
+        "System health status",
       ],
     },
     {

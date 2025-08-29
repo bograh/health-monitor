@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { checkErrorApiHealth } from "@/utils/requests";
+import { checkHealth } from "@/utils/requests";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -63,7 +63,7 @@ export function MonitoringMetricsPage() {
 
   const { data: health, isLoading } = useQuery({
     queryKey: ["metrics-health", timeRange],
-    queryFn: checkErrorApiHealth,
+    queryFn: checkHealth,
     refetchInterval: autoRefresh ? 30000 : false,
   });
 

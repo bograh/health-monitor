@@ -192,8 +192,8 @@ export function ErrorsRecentPage() {
     );
   }
 
-  const errors = errorData?.errors || [];
-  const totalErrors = errorData?.total || 0;
+  const errors = errorData?.data?.errors || [];
+  const totalErrors = errorData?.data?.total || 0;
 
   // Filter for recent errors (last 24 hours) and sort by recency
   const recentErrors = errors

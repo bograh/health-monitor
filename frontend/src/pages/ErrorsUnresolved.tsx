@@ -143,8 +143,8 @@ export function ErrorsUnresolvedPage() {
     );
   }
 
-  const errors = errorData?.errors || [];
-  const totalErrors = errorData?.total || 0;
+  const errors = errorData?.data?.errors || [];
+  const totalErrors = errorData?.data?.total || 0;
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">

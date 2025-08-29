@@ -81,8 +81,8 @@ export function LiveErrorStream({
 
   // Update error stream when new data arrives
   useEffect(() => {
-    if (errorData?.errors && !isPaused) {
-      const newErrors = errorData.errors;
+    if (errorData?.data?.errors && !isPaused) {
+      const newErrors = errorData.data.errors;
 
       setErrorStream((prevStream) => {
         // Find truly new errors by comparing with existing stream

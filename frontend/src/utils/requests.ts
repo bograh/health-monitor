@@ -3,12 +3,29 @@ import axios from "axios";
 import type {
   ErrorLog,
   LogsResponse,
-  ServiceStatus,
   PerformanceMetric,
-  AlertRule,
   BackendError,
   ErrorsResponse,
+  ErrorResponse,
   ErrorStatsResponse,
+  ResolveErrorResponse,
+  AnalyticsTrendsResponse,
+  AnalyticsPerformanceResponse,
+  MonitoringServicesResponse,
+  MonitoringMetricsResponse,
+  MonitoringUptimeResponse,
+  AlertRulesResponse,
+  CreateAlertRuleRequest,
+  CreateAlertRuleResponse,
+  IncidentsResponse,
+  CreateIncidentRequest,
+  ApiKeysResponse,
+  CreateApiKeyRequest,
+  CreateApiKeyResponse,
+  TeamResponse,
+  InviteTeamMemberRequest,
+  IntegrationsResponse,
+  HealthResponse,
 } from "../types/api.types";
 
 // Create an axios instance with default configuration
@@ -120,34 +137,12 @@ export async function fetchLogs(url: string): Promise<ErrorLog[]> {
   }
 }
 
-// Fetch service status
-export async function fetchServiceStatus(
-  url: string
-): Promise<ServiceStatus[]> {
-  try {
-    const response = await apiClient.get<ServiceStatus[]>(url);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-}
-
 // Fetch performance metrics
 export async function fetchPerformanceMetrics(
   url: string
 ): Promise<PerformanceMetric[]> {
   try {
     const response = await apiClient.get<PerformanceMetric[]>(url);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-}
-
-// Fetch alert rules
-export async function fetchAlertRules(url: string): Promise<AlertRule[]> {
-  try {
-    const response = await apiClient.get<AlertRule[]>(url);
     return response.data;
   } catch (error) {
     throw error;
@@ -209,7 +204,18 @@ errorApiClient.interceptors.response.use(
   }
 );
 
-// Error Logging API Functions
+// ===== HEALTH ENDPOINTS =====
+
+export async function checkHealth(): Promise<HealthResponse> {
+  try {
+    const response = await errorApiClient.get<HealthResponse>("/health");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// ===== ERROR ENDPOINTS =====
 
 // Fetch errors with pagination and filtering
 export async function fetchErrors(params?: {
@@ -231,10 +237,10 @@ export async function fetchErrors(params?: {
 // Get specific error by ID
 export async function fetchErrorById(id: string): Promise<BackendError> {
   try {
-    const response = await errorApiClient.get<BackendError>(
+    const response = await errorApiClient.get<ErrorResponse>(
       `/api/errors/${id}`
     );
-    return response.data;
+    return response.data.data;
   } catch (error) {
     throw error;
   }
@@ -251,9 +257,9 @@ export async function fetchErrorStats(): Promise<ErrorStatsResponse> {
 }
 
 // Resolve an error
-export async function resolveError(id: string): Promise<{ status: string }> {
+export async function resolveError(id: string): Promise<ResolveErrorResponse> {
   try {
-    const response = await errorApiClient.put<{ status: string }>(
+    const response = await errorApiClient.put<ResolveErrorResponse>(
       `/api/errors/${id}/resolve`
     );
     return response.data;
@@ -271,21 +277,237 @@ export async function deleteError(id: string): Promise<void> {
   }
 }
 
-// Check API health
-export async function checkErrorApiHealth(): Promise<{
-  status: string;
-  timestamp: string;
-}> {
+// ===== ANALYTICS ENDPOINTS =====
+
+// Get error trends
+export async function fetchErrorTrends(params?: {
+  period?: string;
+  group_by?: string;
+}): Promise<AnalyticsTrendsResponse> {
   try {
-    const response = await errorApiClient.get<{
-      status: string;
-      timestamp: string;
-    }>("/health");
+    const response = await errorApiClient.get<AnalyticsTrendsResponse>(
+      "/api/analytics/trends",
+      { params }
+    );
     return response.data;
   } catch (error) {
     throw error;
   }
 }
+
+// Get performance metrics
+export async function fetchAnalyticsPerformance(): Promise<AnalyticsPerformanceResponse> {
+  try {
+    const response = await errorApiClient.get<AnalyticsPerformanceResponse>(
+      "/api/analytics/performance"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// ===== MONITORING ENDPOINTS =====
+
+// Get service health status
+export async function fetchServiceHealth(): Promise<MonitoringServicesResponse> {
+  try {
+    const response = await errorApiClient.get<MonitoringServicesResponse>(
+      "/api/monitoring/services"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Get system metrics
+export async function fetchSystemMetrics(params?: {
+  timeframe?: string;
+}): Promise<MonitoringMetricsResponse> {
+  try {
+    const response = await errorApiClient.get<MonitoringMetricsResponse>(
+      "/api/monitoring/metrics",
+      { params }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Get uptime data
+export async function fetchUptimeData(): Promise<MonitoringUptimeResponse> {
+  try {
+    const response = await errorApiClient.get<MonitoringUptimeResponse>(
+      "/api/monitoring/uptime"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// ===== ALERTS ENDPOINTS =====
+
+// Get alert rules
+export async function fetchAlertRules(): Promise<AlertRulesResponse> {
+  try {
+    const response = await errorApiClient.get<AlertRulesResponse>(
+      "/api/alerts/rules"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Create alert rule
+export async function createAlertRule(
+  data: CreateAlertRuleRequest
+): Promise<CreateAlertRuleResponse> {
+  try {
+    const response = await errorApiClient.post<CreateAlertRuleResponse>(
+      "/api/alerts/rules",
+      data
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Update alert rule
+export async function updateAlertRule(
+  id: string,
+  data: CreateAlertRuleRequest
+): Promise<CreateAlertRuleResponse> {
+  try {
+    const response = await errorApiClient.put<CreateAlertRuleResponse>(
+      `/api/alerts/rules/${id}`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Delete alert rule
+export async function deleteAlertRule(id: string): Promise<void> {
+  try {
+    await errorApiClient.delete(`/api/alerts/rules/${id}`);
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Get incidents
+export async function fetchIncidents(): Promise<IncidentsResponse> {
+  try {
+    const response = await errorApiClient.get<IncidentsResponse>(
+      "/api/alerts/incidents"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Create incident
+export async function createIncident(
+  data: CreateIncidentRequest
+): Promise<IncidentsResponse> {
+  try {
+    const response = await errorApiClient.post<IncidentsResponse>(
+      "/api/alerts/incidents",
+      data
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// ===== SETTINGS ENDPOINTS =====
+
+// Get API keys
+export async function fetchApiKeys(): Promise<ApiKeysResponse> {
+  try {
+    const response = await errorApiClient.get<ApiKeysResponse>(
+      "/api/settings/api-keys"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Create API key
+export async function createApiKey(
+  data: CreateApiKeyRequest
+): Promise<CreateApiKeyResponse> {
+  try {
+    const response = await errorApiClient.post<CreateApiKeyResponse>(
+      "/api/settings/api-keys",
+      data
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Delete API key
+export async function deleteApiKey(id: string): Promise<void> {
+  try {
+    await errorApiClient.delete(`/api/settings/api-keys/${id}`);
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Get team members
+export async function fetchTeamMembers(): Promise<TeamResponse> {
+  try {
+    const response = await errorApiClient.get<TeamResponse>(
+      "/api/settings/team"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Invite team member
+export async function inviteTeamMember(
+  data: InviteTeamMemberRequest
+): Promise<{ status: string }> {
+  try {
+    const response = await errorApiClient.post<{ status: string }>(
+      "/api/settings/team/invite",
+      data
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Get integrations
+export async function fetchIntegrations(): Promise<IntegrationsResponse> {
+  try {
+    const response = await errorApiClient.get<IntegrationsResponse>(
+      "/api/settings/integrations"
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Legacy function names for backward compatibility
+export const checkErrorApiHealth = checkHealth;
 
 // Dummy data for error logs (legacy)
 export const data = [

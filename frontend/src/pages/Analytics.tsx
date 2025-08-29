@@ -31,13 +31,8 @@ export function AnalyticsPage() {
     );
   }
 
-  const errorTrend =
-    stats?.errors_this_week && stats?.errors_this_month
-      ? (stats.errors_this_week / (stats.errors_this_month / 4) - 1) * 100
-      : 0;
-
-  const resolutionRate = stats?.total_errors
-    ? (stats.resolved_errors / stats.total_errors) * 100
+  const resolutionRate = stats?.data?.total_errors
+    ? (stats.data.resolved_errors / stats.data.total_errors) * 100
     : 0;
 
   return (
@@ -54,21 +49,16 @@ export function AnalyticsPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              {errorTrend >= 0 ? (
-                <TrendingUp className="h-4 w-4 text-red-600" />
-              ) : (
-                <TrendingDown className="h-4 w-4 text-green-600" />
-              )}
-              Weekly Error Trend
+              <TrendingUp className="h-4 w-4 text-blue-600" />
+              Error Overview
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {errorTrend >= 0 ? "+" : ""}
-              {errorTrend.toFixed(1)}%
+              {stats?.data?.total_errors || 0}
             </div>
             <p className="text-xs text-muted-foreground">
-              Compared to monthly average
+              Total errors in system
             </p>
           </CardContent>
         </Card>
@@ -86,7 +76,8 @@ export function AnalyticsPage() {
               {resolutionRate.toFixed(1)}%
             </div>
             <p className="text-xs text-muted-foreground">
-              {stats?.resolved_errors}/{stats?.total_errors} errors resolved
+              {stats?.data?.resolved_errors}/{stats?.data?.total_errors} errors
+              resolved
             </p>
           </CardContent>
         </Card>
@@ -101,12 +92,12 @@ export function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {stats?.errors_this_month
-                ? Math.round(stats.errors_this_month / 30)
+              {stats?.data?.total_errors
+                ? Math.round(stats.data.total_errors / 30)
                 : 0}
             </div>
             <p className="text-xs text-muted-foreground">
-              Errors per day this month
+              Average errors per day
             </p>
           </CardContent>
         </Card>
@@ -120,21 +111,25 @@ export function AnalyticsPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center">
                 <div className="text-lg font-semibold text-red-600">
-                  {stats?.errors_today || 0}
+                  {stats?.data?.total_errors || 0}
                 </div>
-                <div className="text-sm text-muted-foreground">Today</div>
+                <div className="text-sm text-muted-foreground">
+                  Total Errors
+                </div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-semibold text-orange-600">
-                  {stats?.errors_this_week || 0}
+                  {stats?.data?.resolved_errors || 0}
                 </div>
-                <div className="text-sm text-muted-foreground">This Week</div>
+                <div className="text-sm text-muted-foreground">Resolved</div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-semibold text-blue-600">
-                  {stats?.errors_this_month || 0}
+                  {resolutionRate.toFixed(1)}%
                 </div>
-                <div className="text-sm text-muted-foreground">This Month</div>
+                <div className="text-sm text-muted-foreground">
+                  Resolution Rate
+                </div>
               </div>
             </div>
           </CardContent>
@@ -160,9 +155,9 @@ export function AnalyticsPage() {
             <div className="flex justify-between items-center">
               <span className="text-sm">Error Volume</span>
               <span className="text-sm font-medium">
-                {(stats?.errors_today || 0) < 10
+                {(stats?.data?.total_errors || 0) < 10
                   ? "Low"
-                  : (stats?.errors_today || 0) < 50
+                  : (stats?.data?.total_errors || 0) < 50
                   ? "Moderate"
                   : "High"}
               </span>

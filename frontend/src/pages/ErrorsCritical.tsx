@@ -151,8 +151,8 @@ export function ErrorsCriticalPage() {
     );
   }
 
-  const errors = errorData?.errors || [];
-  const totalErrors = errorData?.total || 0;
+  const errors = errorData?.data?.errors || [];
+  const totalErrors = errorData?.data?.total || 0;
 
   // Calculate critical stats
   const highFrequencyErrors = errors.filter((e) => e.count >= 10);

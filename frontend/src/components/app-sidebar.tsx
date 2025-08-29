@@ -6,15 +6,11 @@ import {
   AlertTriangle,
   BarChart3,
   Bell,
-  Server,
   Settings,
   Activity,
-  Shield,
-  TrendingUp,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
@@ -153,23 +149,6 @@ const data = {
       ],
     },
   ],
-  navSecondary: [
-    {
-      title: "API Health",
-      url: "/monitoring/health",
-      icon: Shield,
-    },
-    {
-      title: "System Status",
-      url: "/monitoring",
-      icon: Server,
-    },
-    {
-      title: "Live Errors",
-      url: "/errors/recent",
-      icon: TrendingUp,
-    },
-  ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -196,7 +175,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

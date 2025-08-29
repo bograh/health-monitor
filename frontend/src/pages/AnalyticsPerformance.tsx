@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchErrorStats, checkErrorApiHealth } from "@/utils/requests";
+import { fetchErrorStats, checkHealth } from "@/utils/requests";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -53,7 +53,7 @@ export function AnalyticsPerformancePage() {
 
   const { data: health, isLoading: healthLoading } = useQuery({
     queryKey: ["analytics-performance-health"],
-    queryFn: checkErrorApiHealth,
+    queryFn: checkHealth,
     refetchInterval: 15000,
   });
 
@@ -299,7 +299,36 @@ export function AnalyticsPerformancePage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {systemMetrics.map((metric, index) => (
+            {/* Mock system metrics since the API doesn't provide component-level data yet */}
+            {[
+              {
+                component: "Web Server",
+                metric: "Response Time",
+                current: 45,
+                average: 52,
+                max: 120,
+                unit: "ms",
+                status: "healthy" as const,
+              },
+              {
+                component: "Database",
+                metric: "Query Time",
+                current: 12,
+                average: 15,
+                max: 45,
+                unit: "ms",
+                status: "healthy" as const,
+              },
+              {
+                component: "Cache",
+                metric: "Hit Rate",
+                current: 94,
+                average: 89,
+                max: 100,
+                unit: "%",
+                status: "healthy" as const,
+              },
+            ].map((metric, index) => (
               <div key={index} className="border rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
@@ -450,7 +479,7 @@ export function AnalyticsPerformancePage() {
       </Card>
 
       {/* Performance Alerts */}
-      {stats && stats.errors_today > 30 && (
+      {stats && stats.data?.total_errors > 30 && (
         <Card className="border-yellow-200 bg-yellow-50">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -463,8 +492,8 @@ export function AnalyticsPerformancePage() {
               </Badge>
             </div>
             <p className="text-sm text-yellow-700 mt-2">
-              Error rate has increased by 15% in the last hour. Consider
-              investigating system performance.
+              Total errors: {stats.data.total_errors}. Consider investigating
+              system performance.
             </p>
           </CardContent>
         </Card>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchErrorStats, checkErrorApiHealth } from "@/utils/requests";
+import { fetchErrorStats, checkHealth } from "@/utils/requests";
 import { LiveErrorStream } from "@/components/ui/liveErrorStream";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,6 @@ import {
   Zap,
   Pause,
   Play,
-  RefreshCw,
 } from "lucide-react";
 
 interface LiveMetric {
@@ -47,12 +46,11 @@ export function DashboardRealtimePage() {
 
   const { data: health, isLoading: healthLoading } = useQuery({
     queryKey: ["health", "realtime"],
-    queryFn: checkErrorApiHealth,
+    queryFn: checkHealth,
     refetchInterval: isGlobalPaused ? false : 10000,
     refetchOnWindowFocus: false,
   });
 
-  // Mock live metrics (in real app, these would come from WebSocket or frequent polling)
   const liveMetrics: LiveMetric[] = [
     {
       label: "Errors/min",
@@ -243,7 +241,7 @@ export function DashboardRealtimePage() {
                     Real-time chart would be rendered here
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Current rate: {stats?.errors_today || 0} errors today
+                    Current rate: {stats?.data?.total_errors || 0} total errors
                   </p>
                 </div>
               </div>
@@ -290,7 +288,7 @@ export function DashboardRealtimePage() {
       </div>
 
       {/* Alert Bar for Critical Issues */}
-      {!statsLoading && stats && stats.errors_today > 50 && (
+      {!statsLoading && stats && stats.data?.total_errors > 50 && (
         <Card className="border-red-200 bg-red-50">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
@@ -299,7 +297,7 @@ export function DashboardRealtimePage() {
                 High Error Volume Detected
               </span>
               <Badge variant="destructive">
-                {stats.errors_today} errors today
+                {stats.data.total_errors} total errors
               </Badge>
             </div>
           </CardContent>
